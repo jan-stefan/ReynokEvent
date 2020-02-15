@@ -1,0 +1,19 @@
+{
+  "name": "reynok-event",
+  "version": "1.0.0",
+  "description": "browser event system for javascript",
+  "main": "src/main/ReynokEvent.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jan-stefan/ReynokEvent.git"
+  },
+  "keywords": [
+    "browser",
+    "events"
+  ],
+  "author": "jan stefan gehrmann",
+  "license": "ISC"
+}

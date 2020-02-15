@@ -118,3 +118,4 @@ const ReynokEvent = {
     }
 };
 
+module.exports = ReynokEvent;
