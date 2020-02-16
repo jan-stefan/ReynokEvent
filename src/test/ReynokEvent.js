@@ -3,8 +3,8 @@
 
 
 //use subscribe call to subscribe to a event.
-// import {ReynokEvent} from "./src/main/ReynokEvent";
-// var ReynokEvent = require("./src/main/ReynokEvent.js");
+// import {ReynokEvent} from "reynok-event";
+// var ReynokEvent = require("reynok-event");
 
 // ReynokEvent.subscribe('mach', function () {
 //     console.log("luuuui");
