@@ -9,6 +9,13 @@ Include it in your project:
 let Event = require('reynok-event');
 ```
 
+OR
+
+```javascript
+import Event from 'reynok-event';
+```
+
+
 After that just subscribe to a event:
 ```javascript
 const EVENT_ID = Event.subscribe('my-event-name', function () {
