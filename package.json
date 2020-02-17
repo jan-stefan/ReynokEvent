@@ -12,7 +12,9 @@
   },
   "keywords": [
     "browser",
-    "events"
+    "events",
+    "event system",
+    "reynok-event"
   ],
   "author": "Jan Stefan Gehrmann",
   "license": "ISC",
