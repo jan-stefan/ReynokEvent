@@ -3,39 +3,36 @@ const ReynokEvent = {
     /**
      * Subscribes to a event and defines a callback which will run when the event is emitted later.
      * @param eventName - Name of the event. The emit method uses this to trigger events.
-     * @param callback - function that will be triggert when the event was triggered.
-     * @returns eventId {string} - the eventId is used to unsubscriber from the event.
+     * @param callback - function that will be triggered when the event was triggered.
+     * @returns string - the eventId is used to unsubscribe from the event.
      */
     subscribe: function (eventName, callback) {
         /**
          * initialize reynok event Space if not already existing.
          */
-        if (!this.__isNode()) {
-            if (window.reynokEvent === undefined) {
-                window.reynokEvent = [];
-            }
-        } else {
+        if (this.__isNode()) {
             if (global.reynokEvent === undefined) {
                 global.reynokEvent = [];
             }
+        } else {
+            if (window.reynokEvent === undefined) {
+                window.reynokEvent = [];
+            }
         }
 
-        const eventId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        const eventId = this.__createEventId();
 
-        if (!this.__isNode()) {
-            window.reynokEvent.push({
-                event: eventName,
+        if (this.__isNode()) {
+            global.reynokEvent.push({
+                event     : eventName,
                 subscriber: callback,
-                eventId: eventId
+                eventId   : eventId
             });
         } else {
-            global.reynokEvent.push({
-                event: eventName,
+            window.reynokEvent.push({
+                event     : eventName,
                 subscriber: callback,
-                eventId: eventId
+                eventId   : eventId
             });
         }
 
@@ -51,22 +48,23 @@ const ReynokEvent = {
      * @param eventName - The name of the event you want to trigger.
      */
     emit: function (eventName) {
-
-        if (!this.__isNode()) {
-            if (window.reynokEvent === undefined) {
-                console.log("there are not events registered currently.");
+        if (this.__isNode()) {
+            if (global.reynokEvent === undefined) {
+                console.error("No events has been registered yet.");
+                throw new Error("No events has been registered yet.");
             } else {
-                window.reynokEvent.forEach(function (value, index) {
+                global.reynokEvent.forEach(function (value, index) {
                     if (value.event === eventName) {
                         value.subscriber();
                     }
                 });
             }
         } else {
-            if (global.reynokEvent === undefined) {
-                console.log("there are not events registered currently.");
+            if (window.reynokEvent === undefined) {
+                console.error("No events has been registered yet.");
+                throw new Error("No events has been registered yet.");
             } else {
-                global.reynokEvent.forEach(function (value, index) {
+                window.reynokEvent.forEach(function (value, index) {
                     if (value.event === eventName) {
                         value.subscriber();
                     }
@@ -80,28 +78,40 @@ const ReynokEvent = {
      * @param eventId - EventId retrieved from the subscription process.
      */
     unsubscribe: function (eventId) {
+        let store = this.__isNode() ? global : window;
 
-        if (!this.__isNode()) {
-            if (window.reynokEvent === undefined) {
-                console.log("you can not unsubcribe from an event that does not exist.");
-            } else {
-                window.reynokEvent.forEach(function (value, index) {
-                    if (eventId === value.eventId) {
-                        window.reynokEvent.splice(index, 1);
-                    }
-                });
-            }
+        if (store.reynokEvent === undefined) {
+            console.error("Failed to unsubscribe from event.");
+            throw new Error("Failed to unsubscribe from event.");
         } else {
-            if (global.reynokEvent === undefined) {
-                console.log("you can not unsubcribe from an event that does not exist.");
-            } else {
-                global.reynokEvent.forEach(function (value, index) {
-                    if (eventId === value.eventId) {
-                        global.reynokEvent.splice(index, 1);
-                    }
-                });
-            }
+            let found = false;
+            store.reynokEvent.forEach(function (value, index) {
+                if (eventId === value.eventId) {
+                    found = true;
+                    store.reynokEvent.splice(index, 1);
+                }
+            });
+
+            if (!found) throw new Error("No event with event id " + eventId + " found");
         }
+    },
+
+    clear: function () {
+        let store = this.__isNode() ? global : window;
+
+        store.reynokEvent = [];
+    },
+
+    /**
+     * Creates a new Event ID to be used by subscribe.
+     * @returns {string} the event id generated
+     * @private
+     */
+    __createEventId: function () {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     },
 
     /**

@@ -1,10 +1,10 @@
 {
   "name": "reynok-event",
   "version": "1.0.3",
-  "description": "browser event system for javascript",
+  "description": "Browser event system for javascript",
   "main": "src/main/ReynokEvent.js",
   "scripts": {
-    "test": "test"
+    "test": "qunit src/test/*.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +14,9 @@
     "browser",
     "events"
   ],
-  "author": "jan stefan gehrmann",
-  "license": "ISC"
+  "author": "Jan Stefan Gehrmann",
+  "license": "ISC",
+  "devDependencies": {
+    "qunit": "^2.9.3"
+  }
 }
