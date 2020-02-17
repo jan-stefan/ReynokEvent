@@ -1,6 +1,6 @@
 {
   "name": "reynok-event",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Browser event system for javascript",
   "main": "src/main/ReynokEvent.js",
   "scripts": {
